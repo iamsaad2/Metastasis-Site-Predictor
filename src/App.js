@@ -26,7 +26,7 @@ function App() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/predict",
+        "https://abc123.ngrok.io/predict",
         formData,
         {
           headers: {
