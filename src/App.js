@@ -26,7 +26,7 @@ function App() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://75d9-2600-381-cfa0-fa0-8840-250a-1a3e-8a52.ngrok-free.app/predict",
+        "https://d35a-2600-381-cfa0-fa0-8840-250a-1a3e-8a52.ngrok-free.app/predict",
         formData,
         {
           headers: {
