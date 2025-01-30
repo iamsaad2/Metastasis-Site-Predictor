@@ -43,7 +43,9 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Metastasis Site Predictor</h1>
+      <h1 className="text-center mb-4">
+        Predicting the location of primary in the setting of metastatic disease
+      </h1>
       <div className="row">
         {/* Left Column: Form */}
         <div className="col-md-5">
