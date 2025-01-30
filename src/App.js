@@ -26,7 +26,7 @@ function App() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "metastasis-site-predictor-api-production.up.railway.app/predict",
+        "https://metastasis-site-predictor-api-production.up.railway.app/predict",
         formData,
         {
           headers: {
