@@ -5,16 +5,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import BodyDiagram from "./BodyDiagram"; // our updated BodyDiagram
 
 function App() {
-  // Initial form state
+  // Initial form state: set everything to an empty string so nothing is selected by default
   const [formData, setFormData] = useState({
-    age: 50,
-    sex: "Male",
-    race: "White",
-    n_stage: "0",
-    met_bone: "No",
-    met_brain: "No",
-    met_liver: "No",
-    met_lung: "No",
+    age: "",
+    sex: "",
+    race: "",
+    n_stage: "",
+    met_bone: "",
+    met_brain: "",
+    met_liver: "",
+    met_lung: "",
   });
 
   // API response and error state
@@ -72,6 +72,9 @@ function App() {
     })
     .filter(Boolean);
 
+  // Check if every form field has a value (i.e. the form is complete)
+  const isFormComplete = Object.values(formData).every((value) => value !== "");
+
   // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -101,9 +104,20 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">
+      <h1
+        className="text-center mb-4 display-4"
+        style={{
+          fontFamily: "'Roboto', sans-serif",
+
+          fontSize: "2rem",
+          fontWeight: 600,
+          color: "black",
+          textShadow: "1px 1px 3px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         Predicting the Location of Primary in the Setting of Metastatic Disease
       </h1>
+
       <div className="row">
         {/* Left Column: Form */}
         <div className="col-md-4">
@@ -117,6 +131,7 @@ function App() {
                 value={formData.age}
                 onChange={handleChange}
                 className="form-control"
+                placeholder="Enter age"
               />
             </div>
             {/* Sex & Race */}
@@ -328,8 +343,12 @@ function App() {
                 </div>
               </div>
             </div>
-            {/* Submit Button */}
-            <button type="submit" className="btn btn-primary w-100">
+            {/* Submit Button: disable until the form is completely filled out */}
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={!isFormComplete}
+            >
               Submit
             </button>
           </form>
@@ -363,11 +382,29 @@ function App() {
         {/* Right Column: Body Diagram */}
         <div className="col-md-4">
           <div className="card p-4 shadow">
-            <BodyDiagram highlightedOrgans={highlightedOrgans} />
+            <BodyDiagram
+              highlightedOrgans={highlightedOrgans}
+              race={formData.race}
+            />
           </div>
         </div>
       </div>
       {error && <div className="alert alert-danger mt-3">{error}</div>}
+
+      {/* Footer with predictor description */}
+      <footer className="mt-5 p-3 bg-light text-center">
+        <p>
+          This tool is designed to help identify the most likely site of primary
+          cancer in the presence of newly diagnosed metastatic disease. The tool
+          is meant to be used for patients who have been diagnosed with
+          metastatic cancer on imaging but have no biopsy or labs to aid in
+          forming a differential diagnosis. The user inputs the patient's age,
+          sex, race, involvement of lymph nodes, and presence of metastases to
+          different organs (e.g., bone, brain, liver, or lungs). The app runs a
+          gradient forest machine learning model that predicts the top five most
+          likely primary cancer sites, along with their predicted probability.
+        </p>
+      </footer>
     </div>
   );
 }

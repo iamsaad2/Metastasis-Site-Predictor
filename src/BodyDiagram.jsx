@@ -15,7 +15,7 @@ function getFillColor(organId, highlightedOrgans) {
   return highlightedOrgans.includes(organId) ? "red" : "#eee";
 }
 
-export default function BodyDiagram({ highlightedOrgans = [] }) {
+export default function BodyDiagram({ highlightedOrgans = [], race }) {
   return (
     <svg
       width="350"
@@ -26,8 +26,8 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
     >
       <title>Approximate Human Body Diagram</title>
       
-      {/* Always render the body silhouette */}
-      <BodySVG />
+      {/* Always render the body silhouette and pass along the race prop */}
+      <BodySVG race={race} />
 
       {/* Conditionally render each organ based on highlightedOrgans */}
       {highlightedOrgans.includes("head-and-neck") && (
@@ -52,7 +52,7 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
         </g>
       )}
 
-{highlightedOrgans.includes("stomach") && (
+      {highlightedOrgans.includes("stomach") && (
         <g
           id="stomach"
           fill={getFillColor("stomach", highlightedOrgans)}
@@ -62,6 +62,7 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
           <ESSVG width={100} height={100} />
         </g>
       )}
+
       {highlightedOrgans.includes("lung") && (
         <g
           id="lung"
@@ -83,8 +84,6 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
           <LiverSVG width={100} height={100} />
         </g>
       )}
-
-     
 
       {highlightedOrgans.includes("intestine") && (
         <g
@@ -118,8 +117,8 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
           <ThyroidSVG width={100} height={100} />
         </g>
       )}
-
-      {/* Add additional organs similarly if you have their SVG components */}
+      
+      {/* Add additional organs similarly if needed */}
       
     </svg>
   );
