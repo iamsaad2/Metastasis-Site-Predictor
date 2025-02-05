@@ -42,7 +42,7 @@ function App() {
     intestine: "intestine",
     breast: "breast",
     "vulva-vagina": "vulva-vagina",
-    esophagus: "lung",
+    esophagus: "stomach",
     rectum: "rectum",
     cervix: "cervix",
     "liver-and-gall-bladder": "liver-and-gall-bladder",
