@@ -52,6 +52,16 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
         </g>
       )}
 
+{highlightedOrgans.includes("stomach") && (
+        <g
+          id="stomach"
+          fill={getFillColor("stomach", highlightedOrgans)}
+          stroke="#000"
+          transform="translate(120, 100) scale(1.5)"
+        >
+          <ESSVG width={100} height={100} />
+        </g>
+      )}
       {highlightedOrgans.includes("lung") && (
         <g
           id="lung"
@@ -74,16 +84,7 @@ export default function BodyDiagram({ highlightedOrgans = [] }) {
         </g>
       )}
 
-      {highlightedOrgans.includes("stomach") && (
-        <g
-          id="stomach"
-          fill={getFillColor("stomach", highlightedOrgans)}
-          stroke="#000"
-          transform="translate(120, 100) scale(1.5)"
-        >
-          <ESSVG width={100} height={100} />
-        </g>
-      )}
+     
 
       {highlightedOrgans.includes("intestine") && (
         <g
