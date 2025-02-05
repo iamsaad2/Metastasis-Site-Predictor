@@ -1,8 +1,11 @@
+// App.js
 import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import BodyDiagram from "./BodyDiagram"; // our updated BodyDiagram
 
 function App() {
+  // Initial form state
   const [formData, setFormData] = useState({
     age: 50,
     sex: "Male",
@@ -14,14 +17,67 @@ function App() {
     met_lung: "No",
   });
 
+  // API response and error state
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
-  console.log(error);
 
+  /**
+   * Organ name map:
+   *  The keys must match the "site.name" from your CSV (Top_1_Name, etc.)
+   *  The values must match the 'id' attributes used in BodyDiagram.jsx
+   */
+  const organMap = {
+    "soft-tissue": "soft-tissue",
+    other: "other",
+    orbit: "orbit",
+    testis: "testis",
+    lung: "lung",
+    "kidney-renal-pelvis-ureter": "kidney-renal-pelvis-ureter",
+    "melanoma-of-the-skin": "melanoma-of-the-skin",
+    pancreas: "pancreas",
+    "head-and-neck": "head-and-neck",
+    ovary: "ovary",
+    thyroid: "thyroid",
+    stomach: "stomach",
+    intestine: "intestine",
+    breast: "breast",
+    "vulva-vagina": "vulva-vagina",
+    esophagus: "lung",
+    rectum: "rectum",
+    cervix: "cervix",
+    "liver-and-gall-bladder": "liver-and-gall-bladder",
+    uterus: "uterus",
+    prostate: "prostate",
+    vulva: "vulva",
+    bladder: "kidney-renal-pelvis-ureter",
+    lymphoma: "lymphoma",
+    anus: "anus",
+  };
+
+  // Limit to top 5 predictions
+  const topFiveResults = results.slice(0, 5);
+
+  // Determine which organs should be highlighted (i.e. rendered on the body)
+  const highlightedOrgans = topFiveResults
+    .map((item) => {
+      const siteName = item["site.name"]
+        ?.trim()
+        .toLowerCase()
+        .replace(/[,]+/g, "")
+        .replace(/\s+/g, "-");
+      console.log("Original site name:", item["site.name"]);
+      console.log("Normalized site name:", siteName);
+      console.log("Mapped organ ID:", organMap[siteName]);
+      return organMap[siteName] || null;
+    })
+    .filter(Boolean);
+
+  // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission (calls your API)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -34,9 +90,11 @@ function App() {
           },
         }
       );
+      console.log("API Response:", response.data);
       setResults(response.data);
       setError(null);
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       setError("An error occurred while fetching predictions.");
     }
   };
@@ -44,12 +102,13 @@ function App() {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">
-        Predicting the location of primary in the setting of metastatic disease
+        Predicting the Location of Primary in the Setting of Metastatic Disease
       </h1>
       <div className="row">
         {/* Left Column: Form */}
-        <div className="col-md-5">
+        <div className="col-md-4">
           <form className="card p-4 shadow" onSubmit={handleSubmit}>
+            {/* Age */}
             <div className="mb-3">
               <label className="form-label">Age:</label>
               <input
@@ -60,6 +119,7 @@ function App() {
                 className="form-control"
               />
             </div>
+            {/* Sex & Race */}
             <div className="row mb-3">
               <div className="col-md-6">
                 <label className="form-label">Sex:</label>
@@ -127,6 +187,7 @@ function App() {
                 </div>
               </div>
             </div>
+            {/* N Stage */}
             <div className="mb-3">
               <label className="form-label">N Stage:</label>
               <div>
@@ -154,6 +215,7 @@ function App() {
                 </div>
               </div>
             </div>
+            {/* Metastasis: Bone / Brain / Liver / Lung */}
             <div className="row mb-3">
               <div className="col-md-6">
                 <label className="form-label">Metastasis to Bone:</label>
@@ -266,16 +328,16 @@ function App() {
                 </div>
               </div>
             </div>
+            {/* Submit Button */}
             <button type="submit" className="btn btn-primary w-100">
               Submit
             </button>
           </form>
         </div>
-
-        {/* Right Column: Results */}
-        <div className="col-md-7">
+        {/* Middle Column: Results */}
+        <div className="col-md-4">
           <div className="card p-4 shadow">
-            <h2>The predicted top 5 sites</h2>
+            <h2>Top 5 Predicted Sites</h2>
             {results.length > 0 ? (
               <table className="table mt-3">
                 <thead>
@@ -285,7 +347,7 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {results.map((row, index) => (
+                  {topFiveResults.map((row, index) => (
                     <tr key={index}>
                       <td>{row["site.name"] || "N/A"}</td>
                       <td>{row["predicted.chance"] || "N/A"}</td>
@@ -294,11 +356,18 @@ function App() {
                 </tbody>
               </table>
             ) : (
-              <p>No predictions yet. Fill out the form and click submit.</p>
+              <p>No predictions yet. Please fill out the form and submit.</p>
             )}
           </div>
         </div>
+        {/* Right Column: Body Diagram */}
+        <div className="col-md-4">
+          <div className="card p-4 shadow">
+            <BodyDiagram highlightedOrgans={highlightedOrgans} />
+          </div>
+        </div>
       </div>
+      {error && <div className="alert alert-danger mt-3">{error}</div>}
     </div>
   );
 }
