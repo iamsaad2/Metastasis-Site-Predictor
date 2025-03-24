@@ -32,6 +32,8 @@ function App() {
     orbit: "orbit",
     testis: "testis",
     lung: "lung",
+    lung_nsclc: "lung",
+    lung_sclc: "lung",
     "kidney-renal-pelvis-ureter": "kidney-renal-pelvis-ureter",
     "melanoma-of-the-skin": "melanoma-of-the-skin",
     pancreas: "pancreas",
