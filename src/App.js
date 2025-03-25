@@ -56,6 +56,11 @@ function App() {
     anus: "anus",
   };
 
+  const siteDisplayNames = {
+    lung_NSCLC: "lung (non-small cell lung cancer)",
+    lung_SCLC: "lung (small cell lung cancer)",
+  };
+
   // Limit to top 5 predictions
   const topFiveResults = results.slice(0, 5);
 
@@ -370,7 +375,11 @@ function App() {
                 <tbody>
                   {topFiveResults.map((row, index) => (
                     <tr key={index}>
-                      <td>{row["site.name"] || "N/A"}</td>
+                      <td>
+                        {siteDisplayNames[row["site.name"]] ||
+                          row["site.name"] ||
+                          "N/A"}
+                      </td>
                       <td>{row["predicted.chance"] || "N/A"}</td>
                     </tr>
                   ))}
