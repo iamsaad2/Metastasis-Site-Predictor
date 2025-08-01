@@ -415,6 +415,18 @@ function App() {
           gradient forest machine learning model that predicts the top five most
           likely primary cancer sites, along with their predicted probability.
         </p>
+
+        <p style={{ fontSize: "12px" }}>
+          Image modified from Human anatomy SVG by Madhero88, licensed under CC
+          BY-SA 3.0.
+          <a
+            href="https://creativecommons.org/licenses/by-sa/3.0/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://creativecommons.org/licenses/by-sa/3.0/
+          </a>
+        </p>
       </footer>
     </div>
   );
